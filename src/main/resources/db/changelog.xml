@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="pavel">
+        <createTable tableName="client">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar"/>
+            <column name="birth_date" type="date"/>
+        </createTable>
+
+        <createTable tableName="type">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="status">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="membership">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_membership_client" referencedTableName="client" referencedColumnNames="id"/>
+            </column>
+            <column name="type_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_membership_type" referencedTableName="type" referencedColumnNames="id"/>
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_membership_status" referencedTableName="status" referencedColumnNames="id"/>
+            </column>
+            <column name="total_freeze_days" type="int">
+            </column>
+        </createTable>
+
+        <createTable tableName="freeze_interval">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="membership_id" type="bigint">
+                <constraints foreignKeyName="fk_freeze_interval_membership" referencedTableName="membership" referencedColumnNames="id"/>
+            </column>
+            <column name="start_date" type="date"/>
+            <column name="end_date" type="date"/>
+        </createTable>
+
+        <createTable tableName="trainer_to_training_type">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="training_type" type="varchar">
+            </column>
+        </createTable>
+
+        <createTable tableName="trainer">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar"/>
+            <column name="birth_date" type="date"/>
+            <column name="trainer_type" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_trainers_trainer_type" referencedTableName="trainer_to_training_type" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="trainings_type">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="decimal"/>
+        </createTable>
+
+        <createTable tableName="personal_training">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_personal_training_client" referencedTableName="client" referencedColumnNames="id"/>
+            </column>
+            <column name="trainer_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_personal_training_trainers" referencedTableName="trainer" referencedColumnNames="id"/>
+            </column>
+            <column name="date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trainings_type" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_personal_training_trainings_type" referencedTableName="trainings_type" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="visit">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_visit_client" referencedTableName="client" referencedColumnNames="id"/>
+            </column>
+            <column name="start_visit" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_visit" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
