@@ -140,4 +140,13 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="2" author="pavel">
+        <renameTable oldTableName="type" newTableName="membership_type"/>
+        <renameTable oldTableName="status" newTableName="membership-status"/>
+    </changeSet>
+
+    <changeSet id="3" author="Pavel">
+        <renameTable oldTableName="membership-status" newTableName="membership_status"/>
+    </changeSet>
 </databaseChangeLog>
