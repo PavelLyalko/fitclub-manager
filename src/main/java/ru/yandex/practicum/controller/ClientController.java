@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.controller.requestResponse.ClientRequest;
 import ru.yandex.practicum.controller.requestResponse.ClientResponse;
+import ru.yandex.practicum.controller.requestResponse.ClientResponseList;
 import ru.yandex.practicum.mapper.ClientRequestMapper;
 import ru.yandex.practicum.mapper.ClientResponseMapper;
 import ru.yandex.practicum.servise.ClientService;
@@ -38,8 +39,9 @@ public class ClientController {
     }
 
     @GetMapping
-    public List<ClientResponse> getAllClients() {
-        return clientService.getAllClients().stream().map(ClientResponseMapper::toClientResponse).toList();
+    public ClientResponseList getAllClients() {
+        List<ClientResponse> clientsResponses= clientService.getAllClients().stream().map(ClientResponseMapper::toClientResponse).toList();
+        return new ClientResponseList(clientsResponses);
     }
 
     @DeleteMapping("/{clientId}")

@@ -6,7 +6,7 @@ import ru.yandex.practicum.entity.Client;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public  class ClientRawMapper implements RowMapper<Client> {
+public  class ClientRowMapper implements RowMapper<Client> {
     @Override
     public Client mapRow(ResultSet rs, int rowNum) throws SQLException {
         Client client = new Client();

@@ -1,7 +1,6 @@
 package ru.yandex.practicum.repository;
 
 import ru.yandex.practicum.entity.Client;
-import ru.yandex.practicum.servise.Dto.ClientDto;
 
 import java.util.List;
 
