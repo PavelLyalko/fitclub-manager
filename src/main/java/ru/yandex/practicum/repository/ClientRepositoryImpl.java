@@ -18,11 +18,9 @@ public class ClientRepositoryImpl implements ClientRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
-    public ClientRepositoryImpl(JdbcTemplate jdbcTemplate) {
+    public ClientRepositoryImpl(JdbcTemplate jdbcTemplate, ClientSimpleJdbcInsert simpleJdbcInsert) {
         this.jdbcTemplate = jdbcTemplate;
-        this.simpleJdbcInsert = new SimpleJdbcInsert(this.jdbcTemplate)
-                .withTableName("client")
-                .usingGeneratedKeyColumns("id");
+        this.simpleJdbcInsert = simpleJdbcInsert;
     }
 
     @Override
@@ -34,9 +32,6 @@ public class ClientRepositoryImpl implements ClientRepository {
         params.put("birth_date", client.getBirthday());
 
         Number key = simpleJdbcInsert.executeAndReturnKey(params);
-        if (key == null) {
-            throw new ClientInsertException("ошибка генерации ID клиента");
-        }
         client.setId(key.longValue());
         return client;
     }

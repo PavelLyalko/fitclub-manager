@@ -1,11 +1,13 @@
 package ru.yandex.practicum.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.yandex.practicum.controller.requestResponse.ClientRequest;
 import ru.yandex.practicum.servise.ClientService;
 import ru.yandex.practicum.servise.Dto.ClientDto;
 
@@ -27,6 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class ClientControllerTest {
     @Autowired
     MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockBean
     ClientService clientService;
@@ -36,9 +40,12 @@ public class ClientControllerTest {
         when(clientService.addClient(any(ClientDto.class)))
                 .thenReturn(new ClientDto(1L, "Jon", "1234567890", "sdsd@mail.com", LocalDate.of(2000, 12, 12)));
 
+        ClientRequest clientRequest = new ClientRequest();
+        clientRequest.setName("Jon");
+
         mockMvc.perform(post("/clients")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Jon\", \"phone\": \"1234567890\",\"email\": \"sdsd@mail.com\", \"birthday\": \"2000-12-12\"}"))
+                        .content(objectMapper.writeValueAsString(clientRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Jon"))
@@ -64,12 +71,10 @@ public class ClientControllerTest {
 
     @Test
     void getAllClients_returnsAllClients() throws Exception {
-        LocalDate birthDateJon = LocalDate.of(2000, 12, 12);
-        LocalDate birthDateBob = LocalDate.of(2000, 11, 11);
 
         when(clientService.getAllClients()).thenReturn(List.of(
-                new ClientDto(1L, "Jon", "1234567890", "user@mail.com", birthDateJon),
-                new ClientDto(2L, "Bob", "1234564331", "client@mail.com", birthDateBob)
+                new ClientDto(1L, "Jon", "1234567890", "user@mail.com", LocalDate.of(2000, 12, 12)),
+                new ClientDto(2L, "Bob", "1234564331", "client@mail.com", LocalDate.of(2000, 11, 11))
         ));
 
         mockMvc.perform(get("/clients"))
