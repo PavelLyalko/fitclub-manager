@@ -24,7 +24,7 @@ public class MembershipRepositoryImpl implements MembershipRepository {
         params.put("client_id", membership.getClientId());
         params.put("type_id", membership.getMembershipType());
         params.put("start_date", membership.getStartDate());
-        params.put("end_date", membership.getEndDate());
+        params.put("total_days", membership.getTotalDays());
         params.put("total_freeze_days", membership.getTotalFreezeDays());
 
         Number key = simpleJdbcInsert.executeAndReturnKey(params);

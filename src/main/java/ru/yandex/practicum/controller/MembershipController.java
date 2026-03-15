@@ -26,6 +26,7 @@ public class MembershipController {
     public MembershipResponse createMembershipToClient(@PathVariable long clientId,
                                                        @Valid @RequestBody MembershipRequest membershipRequest) {
         MembershipDto membershipDto = MembershipRequestMapper.toMembershipDto(membershipRequest);
-        return MembershipResponseMapper.toMembershipResponse(membershipService.createMembershipToClient(clientId, membershipDto));
+        membershipDto.setClientId(clientId);
+        return MembershipResponseMapper.toMembershipResponse(membershipService.createMembershipToClient(membershipDto));
     }
 }

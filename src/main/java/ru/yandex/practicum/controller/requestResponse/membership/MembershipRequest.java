@@ -1,6 +1,7 @@
 package ru.yandex.practicum.controller.requestResponse.membership;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import ru.yandex.practicum.enums.MembershipType;
 
@@ -12,8 +13,6 @@ public class MembershipRequest {
     private MembershipType membershipType;
     @NotNull
     private LocalDate startDate;
-    @NotNull
-    private LocalDate endDate;
-    @NotNull
+    @PositiveOrZero
     private int totalFreezeDays;
 }

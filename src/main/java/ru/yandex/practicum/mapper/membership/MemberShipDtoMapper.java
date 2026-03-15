@@ -7,9 +7,8 @@ public class MemberShipDtoMapper {
     public static Membership toMemberShip(MembershipDto dto) {
         Membership membership = new Membership();
         membership.setClientId(dto.getClientId());
-        membership.setMembershipStatus(dto.getMembershipStatus());
         membership.setStartDate(dto.getStartDate());
-        membership.setEndDate(dto.getEndDate());
+        membership.setTotalDays(dto.getTotalDays());
         membership.setMembershipType(dto.getMembershipType());
         membership.setTotalFreezeDays(dto.getTotalFreezeDays());
         return membership;
@@ -21,7 +20,7 @@ public class MemberShipDtoMapper {
         dto.setClientId(membership.getClientId());
         dto.setMembershipStatus(membership.getMembershipStatus());
         dto.setStartDate(membership.getStartDate());
-        dto.setEndDate(membership.getEndDate());
+        dto.setTotalDays(membership.getTotalDays());
         dto.setMembershipType(membership.getMembershipType());
         dto.setTotalFreezeDays(membership.getTotalFreezeDays());
         return dto;

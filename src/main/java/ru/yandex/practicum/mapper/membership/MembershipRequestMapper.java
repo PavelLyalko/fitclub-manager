@@ -8,7 +8,6 @@ public class MembershipRequestMapper {
         MembershipDto membershipDto = new MembershipDto();
         membershipDto.setMembershipType(membershipRequest.getMembershipType());
         membershipDto.setStartDate(membershipRequest.getStartDate());
-        membershipDto.setEndDate(membershipRequest.getEndDate());
         membershipDto.setTotalFreezeDays(membershipRequest.getTotalFreezeDays());
         return membershipDto;
     }

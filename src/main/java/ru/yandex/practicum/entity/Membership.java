@@ -12,7 +12,7 @@ public class Membership {
     private long clientId;
     private MembershipType membershipType;
     private LocalDate startDate;
-    private LocalDate endDate;
+    private int totalDays;
     private MembershipStatus membershipStatus;
     private int totalFreezeDays;
 }
