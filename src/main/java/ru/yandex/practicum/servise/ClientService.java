@@ -1,6 +1,5 @@
 package ru.yandex.practicum.servise;
 
-import ru.yandex.practicum.controller.requestResponse.ClientResponse;
 import ru.yandex.practicum.servise.Dto.ClientDto;
 
 import java.util.List;

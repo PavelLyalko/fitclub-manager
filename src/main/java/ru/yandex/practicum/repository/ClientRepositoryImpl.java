@@ -5,9 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.entity.Client;
-import ru.yandex.practicum.exception.ClientInsertException;
 import ru.yandex.practicum.exception.ClientNotFoundException;
-import ru.yandex.practicum.mapper.ClientRowMapper;
+import ru.yandex.practicum.mapper.client.ClientRowMapper;
 
 import java.util.HashMap;
 import java.util.List;

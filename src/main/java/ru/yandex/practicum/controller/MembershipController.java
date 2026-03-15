@@ -1,0 +1,31 @@
+package ru.yandex.practicum.controller;
+
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.yandex.practicum.controller.requestResponse.membership.MembershipRequest;
+import ru.yandex.practicum.controller.requestResponse.membership.MembershipResponse;
+import ru.yandex.practicum.mapper.membership.MembershipRequestMapper;
+import ru.yandex.practicum.mapper.membership.MembershipResponseMapper;
+import ru.yandex.practicum.servise.Dto.MembershipDto;
+import ru.yandex.practicum.servise.MembershipService;
+
+@RestController
+@RequestMapping("/memberships")
+public class MembershipController {
+    private final MembershipService membershipService;
+
+    public MembershipController(MembershipService membershipService) {
+        this.membershipService = membershipService;
+    }
+
+    @PostMapping("{/clientId}")
+    public MembershipResponse createMembershipToClient(@PathVariable long clientId,
+                                                       @Valid @RequestBody MembershipRequest membershipRequest) {
+        MembershipDto membershipDto = MembershipRequestMapper.toMembershipDto(membershipRequest);
+        return MembershipResponseMapper.toMembershipResponse(membershipService.createMembershipToClient(clientId, membershipDto));
+    }
+}

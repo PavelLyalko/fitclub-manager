@@ -1,4 +1,4 @@
-package ru.yandex.practicum.controller.requestResponse;
+package ru.yandex.practicum.controller.requestResponse.client;
 
 import lombok.Data;
 

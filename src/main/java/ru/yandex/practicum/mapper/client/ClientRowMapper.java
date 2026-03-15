@@ -1,4 +1,4 @@
-package ru.yandex.practicum.mapper;
+package ru.yandex.practicum.mapper.client;
 
 import org.springframework.jdbc.core.RowMapper;
 import ru.yandex.practicum.entity.Client;
