@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.yandex.practicum.controller.requestResponse.ClientRequest;
+import ru.yandex.practicum.controller.requestResponse.client.ClientRequest;
 import ru.yandex.practicum.servise.ClientService;
 import ru.yandex.practicum.servise.Dto.ClientDto;
 
@@ -37,8 +37,8 @@ public class ClientControllerTest {
 
     @Test
     void saveNewClient_returnsClient() throws Exception {
-        when(clientService.addClient(any(ClientDto.class)))
-                .thenReturn(new ClientDto(1L, "Jon", "1234567890", "sdsd@mail.com", LocalDate.of(2000, 12, 12)));
+//        when(clientService.addClient(any(ClientDto.class)))
+//                .thenReturn(new ClientDto(1L, "Jon", "1234567890", "sdsd@mail.com", LocalDate.of(2000, 12, 12)));
 
         ClientRequest clientRequest = new ClientRequest();
         clientRequest.setName("Jon");

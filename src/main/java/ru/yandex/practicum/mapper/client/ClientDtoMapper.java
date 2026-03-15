@@ -1,4 +1,4 @@
-package ru.yandex.practicum.mapper;
+package ru.yandex.practicum.mapper.client;
 
 import ru.yandex.practicum.entity.Client;
 import ru.yandex.practicum.servise.Dto.ClientDto;

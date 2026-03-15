@@ -2,7 +2,7 @@ package ru.yandex.practicum.servise;
 
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.entity.Client;
-import ru.yandex.practicum.mapper.ClientDtoMapper;
+import ru.yandex.practicum.mapper.client.ClientDtoMapper;
 import ru.yandex.practicum.repository.ClientRepository;
 import ru.yandex.practicum.servise.Dto.ClientDto;
 
