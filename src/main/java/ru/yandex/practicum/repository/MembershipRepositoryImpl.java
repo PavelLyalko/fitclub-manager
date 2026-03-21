@@ -1,34 +1,46 @@
 package ru.yandex.practicum.repository;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.entity.Membership;
+import ru.yandex.practicum.enums.MembershipType;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@RequiredArgsConstructor
 @Repository
 public class MembershipRepositoryImpl implements MembershipRepository {
-    private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert simpleJdbcInsert;
-
-    public MembershipRepositoryImpl(JdbcTemplate jdbcTemplate, SimpleJdbcInsert simpleJdbcInsert) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.simpleJdbcInsert = simpleJdbcInsert;
-    }
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public Membership createMembershipToClient(Membership membership) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("client_id", membership.getClientId());
-        params.put("type_id", membership.getMembershipType());
-        params.put("start_date", membership.getStartDate());
-        params.put("total_days", membership.getTotalDays());
-        params.put("total_freeze_days", membership.getTotalFreezeDays());
+        Long typeId = getMembershipTypeId(membership.getMembershipType());
 
-        Number key = simpleJdbcInsert.executeAndReturnKey(params);
-        membership.setId(key.intValue());
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("clientId", membership.getClientId());
+        params.addValue("typeId", typeId);
+        params.addValue("startDate", membership.getStartDate());
+        params.addValue("totalDays", membership.getTotalDays());
+        params.addValue("totalFreezeDays", membership.getTotalFreezeDays());// в бд отдельная таблица которая хранит дату начала и окончания заморозки
+
+        Long id = namedParameterJdbcTemplate.queryForObject(MembershipQueries.INSERT_INTO_MEMBERSHIP, params, Long.class);
+        if (id == null) {
+            throw new RuntimeException("Insert into membership failed");
+        }
+        membership.setId(id);
         return membership;
+    }
+
+    private Long getMembershipTypeId(MembershipType membershipType) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("name", membershipType.toString());
+
+        try {
+            return namedParameterJdbcTemplate.queryForObject(MembershipQueries.SELECT_ID_FROM_MEMBERSHIP, params, Long.class);
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalArgumentException(
+                    ("MembershipType не найден: " + membershipType), e);
+        }
     }
 }

@@ -1,18 +1,20 @@
 package ru.yandex.practicum.controller.requestResponse.membership;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.yandex.practicum.enums.MembershipStatus;
 import ru.yandex.practicum.enums.MembershipType;
 
 import java.time.LocalDate;
 
+@AllArgsConstructor
 @Data
-public class MembershipResponse {
-    private long id;
-    private long clientId;
+public class CreateMembershipRequest {
+    @NotNull
     private MembershipType membershipType;
+    @NotNull
     private LocalDate startDate;
-    private LocalDate endDate;
-    private MembershipStatus membershipStatus;
+    @PositiveOrZero
     private int totalFreezeDays;
 }

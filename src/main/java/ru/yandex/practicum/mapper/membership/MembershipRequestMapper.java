@@ -1,14 +1,14 @@
 package ru.yandex.practicum.mapper.membership;
 
-import ru.yandex.practicum.controller.requestResponse.membership.MembershipRequest;
+import ru.yandex.practicum.controller.requestResponse.membership.CreateMembershipRequest;
 import ru.yandex.practicum.servise.Dto.MembershipDto;
 
 public class MembershipRequestMapper {
-    public static MembershipDto toMembershipDto(MembershipRequest membershipRequest) {
+    public static MembershipDto toMembershipDto(CreateMembershipRequest createMembershipRequest) {
         MembershipDto membershipDto = new MembershipDto();
-        membershipDto.setMembershipType(membershipRequest.getMembershipType());
-        membershipDto.setStartDate(membershipRequest.getStartDate());
-        membershipDto.setTotalFreezeDays(membershipRequest.getTotalFreezeDays());
+        membershipDto.setMembershipType(createMembershipRequest.getMembershipType());
+        membershipDto.setStartDate(createMembershipRequest.getStartDate());
+        membershipDto.setTotalFreezeDays(createMembershipRequest.getTotalFreezeDays());
         return membershipDto;
     }
 }

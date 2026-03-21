@@ -155,7 +155,7 @@
             <column name="status_id">
             </column>
         </dropColumn>
-        <delete tableName="status">
+        <delete tableName="membership_status">
         </delete>
 
         <dropColumn tableName="membership">
@@ -167,5 +167,17 @@
             <column name="total_days" type="int">
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="5" author="PavelLyalko">
+        <insert tableName="membership_type">
+            <column name="name" value="ONE_MONTH"/>
+        </insert>
+        <insert tableName="membership_type">
+            <column name="name" value="SIX_MONTHS"/>
+        </insert>
+        <insert tableName="membership_type">
+            <column name="name" value="TWELVE_MONTHS"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

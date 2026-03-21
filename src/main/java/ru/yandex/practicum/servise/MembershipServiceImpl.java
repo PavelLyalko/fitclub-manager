@@ -1,17 +1,24 @@
 package ru.yandex.practicum.servise;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.entity.Membership;
+import ru.yandex.practicum.enums.MembershipStatus;
 import ru.yandex.practicum.exception.ClientNotFoundException;
 import ru.yandex.practicum.mapper.membership.MemberShipDtoMapper;
 import ru.yandex.practicum.repository.MembershipRepository;
 import ru.yandex.practicum.servise.Dto.MembershipDto;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
 
 @Service
+
+@RequiredArgsConstructor
 public class MembershipServiceImpl implements MembershipService {
-    private MembershipRepository membershipRepository;
-    private ClientService clientService;
+    private final MembershipRepository membershipRepository;
+    private final ClientService clientService;
+
     @Override
     public MembershipDto createMembershipToClient(MembershipDto membershipDto) {
         if (clientService.getClientById(membershipDto.getClientId()) == null) {
@@ -19,9 +26,13 @@ public class MembershipServiceImpl implements MembershipService {
         }
 
         membershipDto.setTotalDays(membershipDto.getMembershipType().getDays());
+        if (membershipDto.getStartDate().isBefore(LocalDate.now())){
+            throw new DateTimeException("Дата начала действия абонемента не может быть в прошлом.");
+        }
         Membership membership = MemberShipDtoMapper.toMemberShip(membershipDto);
         MembershipDto membershipDtoResponse = MemberShipDtoMapper.toMembershipDto(membershipRepository.createMembershipToClient(membership));
-        membershipDtoResponse.setMembershipStatus();
-        return
+        membershipDtoResponse.setMembershipStatus(MembershipStatus.ACTIVE);
+
+        return membershipDtoResponse;
     }
 }
