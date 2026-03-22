@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ru.yandex.practicum.controller.requestResponse.membership.CreateMembershipRequest;
 import ru.yandex.practicum.enums.MembershipType;
-import ru.yandex.practicum.servise.MembershipService;
+import ru.yandex.practicum.service.MembershipService;
 
 import java.time.LocalDate;
 
@@ -30,17 +30,33 @@ public class MembershipControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void createMembershipToClientTest() throws Exception {
-        CreateMembershipRequest request = new CreateMembershipRequest(MembershipType.ONE_MONTH, LocalDate.of(2026,10,12), 31);
+    void createMembershipToClientTestMustBeNotActive() throws Exception {
+        LocalDate future = LocalDate.now().plusDays(1);
+
+        CreateMembershipRequest request = new CreateMembershipRequest(MembershipType.ONE_MONTH, future, 31);
         long clientId = 2L;
 
         mockMvc.perform(post("/memberships/" + clientId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.membershipType").value(request.getMembershipType()))
-                .andExpect(jsonPath("$.startDate").value(request.getStartDate()))
+                .andExpect(jsonPath("$.membershipType").value(request.getMembershipType().name()))
+                .andExpect(jsonPath("$.startDate").value(request.getStartDate().toString()))
                 .andExpect(jsonPath("$.totalFreezeDays").value(request.getTotalFreezeDays()))
+                .andExpect(jsonPath("$.status").value("INACTIVE"))
                 .andExpect(jsonPath("$.clientId").value(clientId));
+    }
+
+    @Test
+    void createMembershipToClientInPastMustBeValidated() throws Exception {
+        LocalDate past = LocalDate.now().minusDays(1);
+        CreateMembershipRequest request = new CreateMembershipRequest(MembershipType.ONE_MONTH, past, 31);
+        long clientId = 2L;
+
+        mockMvc.perform(post("/memberships/" + clientId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Дата начала действия абонемента не может быть в прошлом."));
     }
 }

@@ -11,8 +11,8 @@ import ru.yandex.practicum.controller.requestResponse.membership.CreateMembershi
 import ru.yandex.practicum.controller.requestResponse.membership.CreateMembershipResponse;
 import ru.yandex.practicum.mapper.membership.MembershipRequestMapper;
 import ru.yandex.practicum.mapper.membership.MembershipResponseMapper;
-import ru.yandex.practicum.servise.Dto.MembershipDto;
-import ru.yandex.practicum.servise.MembershipService;
+import ru.yandex.practicum.service.Dto.MembershipDto;
+import ru.yandex.practicum.service.MembershipService;
 
 @RestController
 @RequestMapping("/memberships")

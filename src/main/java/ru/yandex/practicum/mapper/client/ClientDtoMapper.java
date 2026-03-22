@@ -1,7 +1,7 @@
 package ru.yandex.practicum.mapper.client;
 
 import ru.yandex.practicum.entity.Client;
-import ru.yandex.practicum.servise.Dto.ClientDto;
+import ru.yandex.practicum.service.Dto.ClientDto;
 
 public class ClientDtoMapper {
     public static ClientDto toDto(Client client) {

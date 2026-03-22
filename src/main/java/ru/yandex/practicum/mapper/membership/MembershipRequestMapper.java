@@ -1,7 +1,7 @@
 package ru.yandex.practicum.mapper.membership;
 
 import ru.yandex.practicum.controller.requestResponse.membership.CreateMembershipRequest;
-import ru.yandex.practicum.servise.Dto.MembershipDto;
+import ru.yandex.practicum.service.Dto.MembershipDto;
 
 public class MembershipRequestMapper {
     public static MembershipDto toMembershipDto(CreateMembershipRequest createMembershipRequest) {

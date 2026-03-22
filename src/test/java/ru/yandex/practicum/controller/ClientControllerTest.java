@@ -8,8 +8,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.controller.requestResponse.client.ClientRequest;
-import ru.yandex.practicum.servise.ClientService;
-import ru.yandex.practicum.servise.Dto.ClientDto;
+import ru.yandex.practicum.service.ClientService;
+import ru.yandex.practicum.service.Dto.ClientDto;
 
 import java.time.LocalDate;
 import java.util.List;

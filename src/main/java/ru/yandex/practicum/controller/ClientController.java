@@ -13,8 +13,8 @@ import ru.yandex.practicum.controller.requestResponse.client.ClientResponse;
 import ru.yandex.practicum.controller.requestResponse.client.ClientResponseList;
 import ru.yandex.practicum.mapper.client.ClientRequestMapper;
 import ru.yandex.practicum.mapper.client.ClientResponseMapper;
-import ru.yandex.practicum.servise.ClientService;
-import ru.yandex.practicum.servise.Dto.ClientDto;
+import ru.yandex.practicum.service.ClientService;
+import ru.yandex.practicum.service.Dto.ClientDto;
 
 import java.util.List;
 
