@@ -43,7 +43,7 @@ public class MembershipControllerTest {
                 .andExpect(jsonPath("$.membershipType").value(request.getMembershipType().name()))
                 .andExpect(jsonPath("$.startDate").value(request.getStartDate().toString()))
                 .andExpect(jsonPath("$.totalFreezeDays").value(request.getTotalFreezeDays()))
-                .andExpect(jsonPath("$.status").value("INACTIVE"))
+                .andExpect(jsonPath("$.membershipStatus").value("ACTIVE"))
                 .andExpect(jsonPath("$.clientId").value(clientId));
     }
 

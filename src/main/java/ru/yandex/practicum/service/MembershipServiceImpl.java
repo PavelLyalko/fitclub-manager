@@ -32,8 +32,11 @@ public class MembershipServiceImpl implements MembershipService {
         }
         Membership membership = MemberShipDtoMapper.toMemberShip(membershipDto);
         MembershipDto membershipDtoResponse = MemberShipDtoMapper.toMembershipDto(membershipRepository.createMembershipToClient(membership));
-
-        membershipDtoResponse.setMembershipStatus(MembershipStatus.ACTIVE);// тут надо высчитывать статус
+        if (membershipDtoResponse.getStartDate().isBefore(LocalDate.now())){
+            membershipDtoResponse.setMembershipStatus(MembershipStatus.INACTIVE);// тут надо высчитывать статус
+        } else {
+            membershipDtoResponse.setMembershipStatus(MembershipStatus.ACTIVE);
+        }
 
         return membershipDtoResponse;
     }
