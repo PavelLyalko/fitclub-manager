@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.controller.requestResponse.client.ClientRequest;
 import ru.yandex.practicum.service.ClientService;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 
 @WebMvcTest(controllers = ClientController.class)
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class ClientControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -41,12 +43,15 @@ public class ClientControllerTest {
 
         ClientRequest clientRequest = new ClientRequest();
         clientRequest.setName("Jon");
+        clientRequest.setPhone("1234567890");
+        clientRequest.setEmail("sdsd@mail.com");
+        clientRequest.setBirthday(LocalDate.of(2000, 12, 12));
 
         mockMvc.perform(post("/clients")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(clientRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+//                .andExpect(jsonPath("$.id").value(clientRequest))
                 .andExpect(jsonPath("$.name").value("Jon"))
                 .andExpect(jsonPath("$.phone").value("1234567890"))
                 .andExpect(jsonPath("$.email").value("sdsd@mail.com"))

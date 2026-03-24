@@ -16,6 +16,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDto addClient(ClientDto clientDto) {
+        if (clientDto == null) {
+            throw new IllegalArgumentException("Client cannot be null");
+        }
         Client client = ClientDtoMapper.toClient(clientDto);
         return ClientDtoMapper.toDto(clientRepository.addClient(client));
     }
