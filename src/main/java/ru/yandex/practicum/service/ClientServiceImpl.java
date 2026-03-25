@@ -1,23 +1,24 @@
-package ru.yandex.practicum.servise;
+package ru.yandex.practicum.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.entity.Client;
-import ru.yandex.practicum.mapper.ClientDtoMapper;
+import ru.yandex.practicum.mapper.client.ClientDtoMapper;
 import ru.yandex.practicum.repository.ClientRepository;
-import ru.yandex.practicum.servise.Dto.ClientDto;
+import ru.yandex.practicum.service.Dto.ClientDto;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
-    public ClientServiceImpl(ClientRepository clientRepository) {
-        this.clientRepository = clientRepository;
-    }
-
     @Override
     public ClientDto addClient(ClientDto clientDto) {
+        if (clientDto == null) {
+            throw new IllegalArgumentException("Client cannot be null");
+        }
         Client client = ClientDtoMapper.toClient(clientDto);
         return ClientDtoMapper.toDto(clientRepository.addClient(client));
     }

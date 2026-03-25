@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.controller.requestResponse.ClientRequest;
-import ru.yandex.practicum.controller.requestResponse.ClientResponse;
-import ru.yandex.practicum.controller.requestResponse.ClientResponseList;
-import ru.yandex.practicum.mapper.ClientRequestMapper;
-import ru.yandex.practicum.mapper.ClientResponseMapper;
-import ru.yandex.practicum.servise.ClientService;
-import ru.yandex.practicum.servise.Dto.ClientDto;
+import ru.yandex.practicum.controller.requestResponse.client.ClientRequest;
+import ru.yandex.practicum.controller.requestResponse.client.ClientResponse;
+import ru.yandex.practicum.controller.requestResponse.client.ClientResponseList;
+import ru.yandex.practicum.mapper.client.ClientRequestMapper;
+import ru.yandex.practicum.mapper.client.ClientResponseMapper;
+import ru.yandex.practicum.service.ClientService;
+import ru.yandex.practicum.service.Dto.ClientDto;
 
 import java.util.List;
 

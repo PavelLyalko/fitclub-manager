@@ -1,7 +1,7 @@
-package ru.yandex.practicum.mapper;
+package ru.yandex.practicum.mapper.client;
 
-import ru.yandex.practicum.controller.requestResponse.ClientResponse;
-import ru.yandex.practicum.servise.Dto.ClientDto;
+import ru.yandex.practicum.controller.requestResponse.client.ClientResponse;
+import ru.yandex.practicum.service.Dto.ClientDto;
 
 public class ClientResponseMapper {
     public static ClientResponse toClientResponse(ClientDto clientDto) {
