@@ -23,14 +23,16 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     public MembershipDto createMembershipToClient(MembershipDto membershipDto) {
+        if (membershipDto.getStartDate().isBefore(LocalDate.now())) {
+            throw new DataInvalidException("Дата начала действия абонемента не может быть в прошлом.");
+        }
+
         if (clientService.getClientById(membershipDto.getClientId()) == null) {
             throw new ClientNotFoundException(membershipDto.getClientId());
         }
 
         membershipDto.setTotalDays(membershipDto.getMembershipType().getDays());
-        if (membershipDto.getStartDate().isBefore(LocalDate.now())) {
-            throw new DataInvalidException("Дата начала действия абонемента не может быть в прошлом.");
-        }
+
         Membership membership = MemberShipDtoMapper.toMemberShip(membershipDto);
         MembershipDto membershipDtoResponse = MemberShipDtoMapper.toMembershipDto(membershipRepository.createMembershipToClient(membership));
         updateMembershipStatus(membershipDtoResponse);

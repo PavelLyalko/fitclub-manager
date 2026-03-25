@@ -13,6 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ru.yandex.practicum.controller.requestResponse.membership.CreateMembershipRequest;
 import ru.yandex.practicum.enums.MembershipType;
+import ru.yandex.practicum.service.ClientService;
+import ru.yandex.practicum.service.Dto.ClientDto;
 import ru.yandex.practicum.service.MembershipService;
 
 import java.time.LocalDate;
@@ -24,19 +26,28 @@ public class MembershipControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private MembershipService membershipService;
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
     void createMembershipToClientTestMustBeNotActive() throws Exception {
+        ClientDto clientDto = new ClientDto();
+        clientDto.setBirthday(LocalDate.of(2020, 1, 1));
+        clientDto.setEmail("@yandex.practicum");
+        clientDto.setName("Test");
+        clientDto.setPhone("123456789");
+
+        ClientDto clientDtoResponse = clientService.addClient(clientDto);
+
         LocalDate future = LocalDate.now().plusDays(1);
 
         CreateMembershipRequest request = new CreateMembershipRequest(MembershipType.ONE_MONTH, future, 31);
-        long clientId = 2L;
 
-        mockMvc.perform(post("/memberships/" + clientId)
+
+        mockMvc.perform(post("/memberships/{id}", clientDtoResponse.getId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -44,7 +55,7 @@ public class MembershipControllerTest {
                 .andExpect(jsonPath("$.startDate").value(request.getStartDate().toString()))
                 .andExpect(jsonPath("$.totalFreezeDays").value(request.getTotalFreezeDays()))
                 .andExpect(jsonPath("$.membershipStatus").value("ACTIVE"))
-                .andExpect(jsonPath("$.clientId").value(clientId));
+                .andExpect(jsonPath("$.clientId").value(clientDtoResponse.getId()));
     }
 
     @Test

@@ -1,32 +1,40 @@
 package ru.yandex.practicum.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.entity.Membership;
 import ru.yandex.practicum.mapper.membership.MembershipRawMapper;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
 public class MembershipRepositoryImpl implements MembershipRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Membership createMembershipToClient(Membership membership) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("clientId", membership.getClientId());
-        params.addValue("membershipName", membership.getMembershipType().name());
-        params.addValue("startDate", membership.getStartDate());
-        params.addValue("totalDays", membership.getTotalDays());
-        params.addValue("totalFreezeDays", membership.getTotalFreezeDays());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        Long id = namedParameterJdbcTemplate.queryForObject(MembershipQueries.INSERT_INTO_MEMBERSHIP, params, Long.class);
-        if (id == null) {
-            throw new RuntimeException("Insert into membership failed");
-        }
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(MembershipQueries.INSERT_INTO_MEMBERSHIP, Statement.RETURN_GENERATED_KEYS);
+            ps.setLong(1, membership.getClientId());
+            ps.setString(2, membership.getMembershipType().name());
+            ps.setDate(3, java.sql.Date.valueOf(membership.getStartDate()));
+            ps.setInt(4, membership.getTotalDays());
+            ps.setInt(5, membership.getTotalFreezeDays());
+            return ps;
+        }, keyHolder);
+
+        Long id = keyHolder.getKey().longValue();
         membership.setId(id);
         return membership;
     }
