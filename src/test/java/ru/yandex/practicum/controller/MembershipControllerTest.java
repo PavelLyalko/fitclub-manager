@@ -21,7 +21,7 @@ import java.time.LocalDate;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class MembershipControllerTest {
     @Autowired
     private MockMvc mockMvc;
