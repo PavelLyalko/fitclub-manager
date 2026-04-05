@@ -180,4 +180,46 @@
             <column name="name" value="TWELVE_MONTHS"/>
         </insert>
     </changeSet>
+
+    
+    <changeSet id="6" author="PavelLyalko">
+        <createTable tableName="role">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar"/>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="id" type="bigserial">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar"/>
+            <column name="password" type="varchar"/>
+            <column name="role_id" type="bigint">
+                <constraints foreignKeyName="users_roles" referencedTableName="role" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <insert tableName="role">
+            <column name="name" value="USER"/>
+        </insert>
+
+        <insert tableName="role">
+            <column name="name" value="ADMIN"/>
+        </insert>
+
+        <sql>
+            INSERT INTO users (username, password, role_id)
+            VALUES ('ADMIN', '$2a$12$JDlfcuUMYmCu9X36gQGVgOxfGZEbkRmDG2gULzKK1QogQC1v4Izsa',
+                    (SELECT id FROM role WHERE name = 'ADMIN'));
+        </sql>
+        <sql>
+            INSERT INTO users (username, password, role_id)
+            VALUES ('USER', '$2a$12$uL.6KytHhDbnkdlKI1H3au3tnsM4SeiCuWGEZC7z5lb/f1xGfUVTy',
+                    (SELECT id FROM role WHERE name = 'USER'));
+        </sql>
+
+    </changeSet>
+    
 </databaseChangeLog>
