@@ -21,12 +21,10 @@ public class MyUserRepositoryImpl implements MyUserRepository {
 
     @Override
     public Optional<MyUser> findByUsername(String username) {
-        System.out.println(username);
         Map<String, Object> params = Map.of("username", username);
 
-        var xxx = jdbcTemplate.queryForObject(SQL, params, new MyUserRowMapper());
-        System.out.println(xxx);
+        MyUser user = jdbcTemplate.queryForObject(SQL, params, new MyUserRowMapper());
 
-        return Optional.ofNullable(xxx);
+        return Optional.ofNullable(user);
     }
 }

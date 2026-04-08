@@ -12,6 +12,8 @@ import ru.yandex.practicum.repository.MembershipRepository;
 import ru.yandex.practicum.service.Dto.MembershipDto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -59,6 +61,20 @@ public class MembershipServiceImpl implements MembershipService {
     public List<MembershipDto> getMemberships() {
 
         return membershipRepository.getMemberships().stream().map(MemberShipDtoMapper::toMembershipDto).peek(this::updateMembershipStatus).toList();
+    }
+
+    @Override
+    public MembershipDto getActiveMembershipByClientId(long clientId) {
+        return MemberShipDtoMapper.toMembershipDto(membershipRepository.getActiveMembershipByClientId(clientId));
+    }
+
+    @Override
+    public int getRemainingDays(long clientId) {
+        Membership membership = membershipRepository.getMemberShipToClient(clientId);
+        LocalDate endDate = membership.getStartDate().plusDays(membership.getTotalDays());
+        LocalDate now = LocalDate.now();
+        long remainingDay = ChronoUnit.DAYS.between(now, endDate);
+        return (int) remainingDay;
     }
 
     public void updateMembershipStatus(MembershipDto membershipDtoResponse) {

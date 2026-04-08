@@ -13,4 +13,8 @@ public interface MembershipService {
     void deleteMembershipToClient(long membershipId);
 
     List<MembershipDto> getMemberships();
+
+    int getRemainingDays(long clientId);
+
+    MembershipDto getActiveMembershipByClientId(long clientId);
 }
