@@ -1,8 +1,12 @@
 package ru.yandex.practicum.controller.requestResponse.visit;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class VisitRequest {
-    long clientId;
+    private long clientId;
 }

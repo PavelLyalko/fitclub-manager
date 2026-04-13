@@ -1,6 +1,7 @@
 package ru.yandex.practicum.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -41,12 +42,17 @@ public class MembershipRepositoryImpl implements MembershipRepository {
 
     @Override
     public Membership getActiveMembershipByClientId(long clientId) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("clientId", clientId);
-        return namedParameterJdbcTemplate.queryForObject(MembershipQueries.SELECT_MEMBERSHIP_BY_CLIENT_ID, params, new MembershipRowMapper());
+        MapSqlParameterSource params = new MapSqlParameterSource("clientId", clientId);
+        try {
+            return namedParameterJdbcTemplate.queryForObject(
+                    MembershipQueries.SELECT_MEMBERSHIP_BY_CLIENT_ID,
+                    params,
+                    new MembershipRowMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
-    //TODO getActiveMembershipByClientId - реализовать метод
-
 
     @Override
     public Membership getMemberShipToClient(long membershipId) {

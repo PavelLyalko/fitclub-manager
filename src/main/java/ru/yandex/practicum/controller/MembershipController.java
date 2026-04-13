@@ -49,7 +49,7 @@ public class MembershipController {
         return membershipService.getMemberships().stream().map(MembershipResponseMapper::toMembershipResponse).collect(Collectors.toList());
     }
 
-    @GetMapping
+    @GetMapping("/active")
     public CreateMembershipResponse getActiveMembershipByClientId(@RequestParam long clientId) {
         return MembershipResponseMapper.toMembershipResponse(membershipService.getActiveMembershipByClientId(clientId));
     }

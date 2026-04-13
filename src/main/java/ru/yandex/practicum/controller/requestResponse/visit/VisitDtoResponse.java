@@ -5,8 +5,10 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class VisitResponse {
+public class VisitDtoResponse {
+    private long id;
+    private long clientId;
     private int remainingDays;
-    private boolean success;
-    private LocalDateTime visitStart;
+    private LocalDateTime startVisit;
+    private LocalDateTime endVisit;
 }

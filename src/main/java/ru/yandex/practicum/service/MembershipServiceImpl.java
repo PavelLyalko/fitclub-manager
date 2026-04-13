@@ -12,7 +12,6 @@ import ru.yandex.practicum.repository.MembershipRepository;
 import ru.yandex.practicum.service.Dto.MembershipDto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -65,23 +64,32 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     public MembershipDto getActiveMembershipByClientId(long clientId) {
-        return MemberShipDtoMapper.toMembershipDto(membershipRepository.getActiveMembershipByClientId(clientId));
+        MembershipDto membershipDto = MemberShipDtoMapper.toMembershipDto(membershipRepository.getActiveMembershipByClientId(clientId));
+        updateMembershipStatus(membershipDto);
+        return membershipDto;
     }
 
     @Override
     public int getRemainingDays(long clientId) {
-        Membership membership = membershipRepository.getMemberShipToClient(clientId);
-        LocalDate endDate = membership.getStartDate().plusDays(membership.getTotalDays());
-        LocalDate now = LocalDate.now();
-        long remainingDay = ChronoUnit.DAYS.between(now, endDate);
-        return (int) remainingDay;
+        MembershipDto activeMembership = getActiveMembershipByClientId(clientId);
+        if (activeMembership == null) {
+            return 0;
+        }
+        LocalDate endDate = activeMembership.getStartDate().plusDays(activeMembership.getTotalDays());
+        LocalDate today = LocalDate.now();
+        return (int) ChronoUnit.DAYS.between(today, endDate);
     }
 
-    public void updateMembershipStatus(MembershipDto membershipDtoResponse) {
-        if (membershipDtoResponse.getStartDate().isBefore(LocalDate.now())) {
-            membershipDtoResponse.setMembershipStatus(MembershipStatus.INACTIVE);
+    public void updateMembershipStatus(MembershipDto membershipDto) {
+        LocalDate startDate = membershipDto.getStartDate();
+        int totalDays = membershipDto.getTotalDays();
+        LocalDate endDate = startDate.plusDays(totalDays);
+        LocalDate today = LocalDate.now();
+
+        if (!today.isBefore(startDate) && !today.isAfter(endDate)) {
+            membershipDto.setMembershipStatus(MembershipStatus.ACTIVE);
         } else {
-            membershipDtoResponse.setMembershipStatus(MembershipStatus.ACTIVE);
+            membershipDto.setMembershipStatus(MembershipStatus.INACTIVE);
         }
     }
 }
