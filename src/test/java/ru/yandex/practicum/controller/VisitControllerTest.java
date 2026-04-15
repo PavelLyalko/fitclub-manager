@@ -13,13 +13,13 @@ import ru.yandex.practicum.entity.Membership;
 import ru.yandex.practicum.entity.Visit;
 import ru.yandex.practicum.repository.MembershipRepository;
 import ru.yandex.practicum.repository.VisitRepository;
-import ru.yandex.practicum.service.ClientService;
-import ru.yandex.practicum.service.VisitService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,13 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 public class VisitControllerTest {
     @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    VisitService visitService;
-
-    @Autowired
-    ClientService clientService;
+    private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -76,6 +70,7 @@ public class VisitControllerTest {
                         .content(objectMapper.writeValueAsString(visitRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.visitStart").isString());
+                .andExpect(jsonPath("$.visitStart").isString())
+                .andExpect(jsonPath("$.remainingDays").value(29));
     }
 }
