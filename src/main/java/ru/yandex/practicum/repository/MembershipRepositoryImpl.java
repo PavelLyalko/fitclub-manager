@@ -1,6 +1,7 @@
 package ru.yandex.practicum.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -8,7 +9,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.entity.Membership;
-import ru.yandex.practicum.mapper.membership.MembershipRawMapper;
+import ru.yandex.practicum.mapper.membership.MembershipRowMapper;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -40,10 +41,24 @@ public class MembershipRepositoryImpl implements MembershipRepository {
     }
 
     @Override
+    public Membership getActiveMembershipByClientId(long clientId) {
+        MapSqlParameterSource params = new MapSqlParameterSource("clientId", clientId);
+        try {
+            return namedParameterJdbcTemplate.queryForObject(
+                    MembershipQueries.SELECT_MEMBERSHIP_BY_CLIENT_ID,
+                    params,
+                    new MembershipRowMapper()
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
     public Membership getMemberShipToClient(long membershipId) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("id", membershipId);
-        return namedParameterJdbcTemplate.queryForObject(MembershipQueries.SELECT_MEMBERSHIP_WHERE_ID, params, new MembershipRawMapper());
+        return namedParameterJdbcTemplate.queryForObject(MembershipQueries.SELECT_MEMBERSHIP_WHERE_ID, params, new MembershipRowMapper());
     }
 
     @Override
@@ -55,6 +70,6 @@ public class MembershipRepositoryImpl implements MembershipRepository {
 
     @Override
     public List<Membership> getMemberships() {
-        return namedParameterJdbcTemplate.query(MembershipQueries.SELECT_ALL_MEMBERSHIPS, new MembershipRawMapper());
+        return namedParameterJdbcTemplate.query(MembershipQueries.SELECT_ALL_MEMBERSHIPS, new MembershipRowMapper());
     }
 }

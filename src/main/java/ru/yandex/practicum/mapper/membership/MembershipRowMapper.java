@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class MembershipRawMapper implements RowMapper<Membership> {
+public class MembershipRowMapper implements RowMapper<Membership> {
     public Membership mapRow(ResultSet rs, int rowNum) throws SQLException {
         Membership membership = new Membership();
         membership.setId(rs.getLong("id"));

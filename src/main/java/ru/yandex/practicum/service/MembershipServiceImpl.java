@@ -12,6 +12,7 @@ import ru.yandex.practicum.repository.MembershipRepository;
 import ru.yandex.practicum.service.Dto.MembershipDto;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -61,11 +62,34 @@ public class MembershipServiceImpl implements MembershipService {
         return membershipRepository.getMemberships().stream().map(MemberShipDtoMapper::toMembershipDto).peek(this::updateMembershipStatus).toList();
     }
 
-    public void updateMembershipStatus(MembershipDto membershipDtoResponse) {
-        if (membershipDtoResponse.getStartDate().isBefore(LocalDate.now())) {
-            membershipDtoResponse.setMembershipStatus(MembershipStatus.INACTIVE);
+    @Override
+    public MembershipDto getActiveMembershipByClientId(long clientId) {
+        MembershipDto membershipDto = MemberShipDtoMapper.toMembershipDto(membershipRepository.getActiveMembershipByClientId(clientId));
+        updateMembershipStatus(membershipDto);
+        return membershipDto;
+    }
+
+    @Override
+    public int getRemainingDays(long clientId) {
+        MembershipDto activeMembership = getActiveMembershipByClientId(clientId);
+        if (activeMembership == null) {
+            return 0;
+        }
+        LocalDate endDate = activeMembership.getStartDate().plusDays(activeMembership.getTotalDays());
+        LocalDate today = LocalDate.now();
+        return (int) ChronoUnit.DAYS.between(today, endDate);
+    }
+
+    public void updateMembershipStatus(MembershipDto membershipDto) {
+        LocalDate startDate = membershipDto.getStartDate();
+        int totalDays = membershipDto.getTotalDays();
+        LocalDate endDate = startDate.plusDays(totalDays);
+        LocalDate today = LocalDate.now();
+
+        if (!today.isBefore(startDate) && !today.isAfter(endDate)) {
+            membershipDto.setMembershipStatus(MembershipStatus.ACTIVE);
         } else {
-            membershipDtoResponse.setMembershipStatus(MembershipStatus.ACTIVE);
+            membershipDto.setMembershipStatus(MembershipStatus.INACTIVE);
         }
     }
 }

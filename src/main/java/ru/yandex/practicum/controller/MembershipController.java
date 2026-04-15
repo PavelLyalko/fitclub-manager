@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.controller.requestResponse.membership.CreateMembershipRequest;
 import ru.yandex.practicum.controller.requestResponse.membership.CreateMembershipResponse;
@@ -46,5 +47,10 @@ public class MembershipController {
     @GetMapping
     public List<CreateMembershipResponse> getMemberships() {
         return membershipService.getMemberships().stream().map(MembershipResponseMapper::toMembershipResponse).collect(Collectors.toList());
+    }
+
+    @GetMapping("/active")
+    public CreateMembershipResponse getActiveMembershipByClientId(@RequestParam long clientId) {
+        return MembershipResponseMapper.toMembershipResponse(membershipService.getActiveMembershipByClientId(clientId));
     }
 }
